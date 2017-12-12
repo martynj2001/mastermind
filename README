@@ -1,0 +1,8 @@
+The Odin Project  - Ruby Programming Intermediate
+
+OOP Project 2 - Mastermind.
+
+V1 - Computer generates Rand() human player is code breaker.
+V2 - Human can choose to be code breaker or code creator.
+V3 - Increased Computer AI.
+V4 - Tested GOSU game library to make game look game like.
