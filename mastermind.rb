@@ -1,69 +1,56 @@
 # Mastermind Game - The Odin TheOdinProject Intermediate Ruby Project 2
-class Line
-  attr_accessor :peg_1, :peg_2, :peg_3, :peg_4
+module Mastermind
 
-  def initialize
-    @peg_1 = Struct.new(:color, :position)
-    @peg_2 = Struct.new(:color, :position)
-    @peg_3 = Struct.new(:color, :position)
-    @peg_4 = Struct.new(:color, :position)
+  class Code
 
-  end
-end # Line
+    attr_accessor :row :feedback
 
-class Code_Master
+    def initialize
+      @feedback = Struct.new(:one, :two, :three, :four)
+    end
 
-  attr_accessor :master_code
+    def create_code (pegs)
+      @row = {one: pegs[0], two: pegs[1], three: pegs[2], four: peg[4]}
+    end
 
-  def initialize
-    @master_code = Line.new
-  end
+    def compare_codes (master, guess)
 
-  def create_code
-    #Randonly generate a 4 peg code, assign a colour and postion (1 - 4)
-    @master_code.peg_1.position = rand(1..4)
-    get_color(@master_code.peg_1)
-    @master_code.peg_2.position = rand(1..4)
-    get_color(@master_code.peg_2)
-    @master_code.peg_1.position = rand(1..4)
-    get_color(@master_code.peg_3)
-    @master_code.peg_1.position = rand(1..4)
-    get_color(@master_code.peg_4)
-  end
+    end
 
-  def guess_code (code)
+    def feedback
 
-  end
+    end
 
-  def feedback
+  end # Line
 
-  end
+  class Code_Master < Code
 
-  def get_color (peg)
-    col = rand(1..4)
-    case col
-      when 1
-        peg.color = "Red"
-      when 2
-        peg.color = "Blue"
-      when 3
-        peg.color = "Green"
-      else
-        peg.color = "Yellow"
+    @@peg = nil
+
+    def initialize
+      create_code
+    end
+
+    def create_code # overide parent
+      #Randonly generate a 4 peg code, assign a colour and postion (1 - 4)
+      
+      @row = {one: get_color, two: get_color, three: get_color, four: get_color}
+    end
+
+    def get_color
+      col = rand(1..4)
+      case col
+        when 1
+          @@peg = "Red"
+        when 2
+          @@peg = "Blue"
+        when 3
+          @@peg= "Green"
+        else
+          @@peg = "Yellow"
+        end
       end
-end # Code
 
-
-master_code = Code.new
-master_code.create_code
-puts "Master Code has been generated - try to guess it in 12 turns!"
-turn = 0
-while turn < 12
-  line = {}
-  4.times do |g|
-    print "Guess peg #{g} colore (Red, Green, Blue or Yellow): "
-    line[g] = gets.chomp
-    p line
-  end
-  master_code.guess(line)
-end
+      private :create_code, :get_color
+  end # Code
+end #Mastermind
