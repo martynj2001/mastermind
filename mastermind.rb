@@ -33,8 +33,13 @@ module Mastermind
 
     def create_code # overide parent
       #Randonly generate a 4 peg code, assign a colour and postion (1 - 4)
+      pegs = []
+      4.times do
+      	pegs << get_color
+      	pegs.each {|i| i == 
       
-      @row = {one: get_color, two: get_color, three: get_color, four: get_color}
+      
+      @row = {one: pegs[0], two: pegs[1], three: pegs[2], four: peg[4]}
     end
 
     def get_color
@@ -45,7 +50,7 @@ module Mastermind
         when 2
           @@peg = "Blue"
         when 3
-          @@peg= "Green"
+          @@peg = "Green"
         else
           @@peg = "Yellow"
         end
