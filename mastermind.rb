@@ -3,43 +3,47 @@ module Mastermind
 
   class Code
 
-    attr_accessor :row, :feedback
+    attr_accessor :row, :feedback, :correct_code
 
     def initialize
-      @feedback = Array.new(4)
+      @feedback = Array.new(4, " ")
+      @correct_code = false
     end
 
     def create_code (pegs)
-      @row = {one: pegs[0], two: pegs[1], three: pegs[2], four: peg[3]}
+      @row = {one: pegs[0], two: pegs[1], three: pegs[2], four: pegs[3]}
     end
 
     def compare (g_row)
       #paramenter is a hash representing a row.
+      @feedback.clear!
+      
+      puts "Comparing to Master Code ......"
       @row.each do |pos, color|
         if g_row[pos] == color
           @feedback << "BLACK"
+          puts "BLACK"
         elsif g_row.include?(color)
           @feedback << "WHITE"
+          puts "WHITE"
         end
-        @feedback.sort
+        @feedback.sort!
+        p @feedback
       end
-
     end
 
-    def feedback(loc, type)
-
-
-
-      end
-
+    def correct_code
+     @feedback.all? {|col| col == "BLACK"} ? @correct_code = true : @correct_code = false
     end
 
-  end # Line
+  end # Code
 
   class Code_Master < Code
 
     def initialize
       create_code
+      @feedback = Array.new(4, " ")
+      @correct_code = false
     end
 
     def create_code # overide superclass method
