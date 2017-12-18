@@ -3,11 +3,11 @@ module Mastermind
 
   class Code
 
-    attr_accessor :row, :correct_code, :feedback
+    attr_accessor :row, :correct_code, :black, :white
 
     def initialize
-      @feedback = {BLACK: 1, WHITE: 1}
-      print @feedback
+      @black = 0
+      @white = 0
       @correct_code = false
     end
 
@@ -15,25 +15,19 @@ module Mastermind
       @row = {one: pegs[0], two: pegs[1], three: pegs[2], four: pegs[3]}
     end
 
-    def compare (g_row)
+    def compare (code)
       #paramenter is a hash representing a row.
-      puts "Comparing to Master Code ......"
-
+      puts "Comparing Codes ......"
       @row.each do |pos, color|
         puts "Position #{pos} is #{color}"
-        if g_row[pos] == color
-          puts "Black Peg awrded"
-          @feedback.each{|key, value| key == :BLACK ? value += 1 : value}
-        elsif g_row.include?(color)
-          @feedback.each{|key, value| key == :WHITE ? vlaue += 1 : value}
-          puts "White Peg awrded"
+        if code.row.has_value?(color)
+          if pos == code.row.key(color)
+            code.black += 1
+          else
+            code.white += 1
+          end
         end
       end
-      @feedback.each {|key, value| puts "#{key.to_s} pegs: #{value}"}
-    end
-
-    def correct_code
-
     end
 
   end # Code

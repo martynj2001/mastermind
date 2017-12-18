@@ -23,5 +23,8 @@ while turn < 12
     pegs << gets.chomp
   end
   code.create_code(pegs)
-  master_code.compare(code.row)
+  master_code.compare(code)
+  puts "FEEDBACK: "
+  puts " * Black (Right Colour, Right Position): #{code.black}"
+  puts " * White (Right Colour, Wrong Position): #{code.white}"
 end
