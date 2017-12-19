@@ -30,6 +30,10 @@ module Mastermind
       end
     end
 
+    def has_won?
+      @black == 4 ? true : false
+    end
+
   end # Code
 
   class Code_Master < Code

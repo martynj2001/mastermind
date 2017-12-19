@@ -24,6 +24,8 @@ while turn < 12
   end
   code.create_code(pegs)
   master_code.compare(code)
+  code.has_won? ? 
+
   puts "FEEDBACK: "
   puts " * Black (Right Colour, Right Position): #{code.black}"
   puts " * White (Right Colour, Wrong Position): #{code.white}"
