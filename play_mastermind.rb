@@ -24,8 +24,11 @@ while turn < 12
   end
   code.create_code(pegs)
   master_code.compare(code)
-
-  puts "FEEDBACK: "
-  puts " * Black (Right Colour, Right Position): #{code.black}"
-  puts " * White (Right Colour, Wrong Position): #{code.white}"
+  if code.has_won?
+  	puts "Congratualtions you have broken the code"
+  else
+	  puts "FEEDBACK: "
+	  puts " * Black (Right Colour, Right Position): #{code.black}"
+	  puts " * White (Right Colour, Wrong Position): #{code.white}"
+  end
 end
