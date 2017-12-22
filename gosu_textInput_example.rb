@@ -9,9 +9,13 @@ class KeyboardExample < Gosu::Window
 		self.text_input.text = "Type something!"
 	end
 
+	def update
+
+	end
+
 	def draw
 		@font.draw(self.text_input.text, 20, 40, 0)
 	end
-end 
+end
 
 window = KeyboardExample.new.show
