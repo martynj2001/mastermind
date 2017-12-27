@@ -35,7 +35,7 @@
       @pegs = Array.new
       @history = Array.new
       @prompt_text = "Welcome to Mastermind..... Press Enter to continue."
-      @prompt, @guess_no = Gosu::Font.new(20, name: "Nimbus Mono L")
+      @prompt, @guess_no = Gosu::Font.new(25, name: "Nimbus Mono L")
       @guess = 0
       @peg_selected = false
       @master_code = Code_Master.new
@@ -63,8 +63,9 @@
       @green_peg.draw(GREEN_X, GREEN_Y, ZOrder::PEGS)
       @yellow_peg.draw(YELLOW_X, YELLOW_Y, ZOrder::PEGS)
 
-      # Draw any previous attempts on a new line.
-      if @history.length > 0 
+      # Draw any previous attempts with feedback on a new line.
+      # TO DO: Convert @history to hold Code objects, overide Code class to contain Array of images (@peg_image)
+      if @history.length > 0
         line_y = 325
         @history.each do |line|
           line_x = 175
@@ -87,7 +88,7 @@
     def button_down(id)
       if id == Gosu::KB_RETURN
         if @guess < 1
-          @prompt_text = "Use the mouse to select your code.and press Enter to confirm"
+          @prompt_text = "Use the mouse to select your code and press Enter to confirm"
           @guess += 1
         else
           @prompt_text = "You have had #{@guess} attempts"
@@ -103,8 +104,7 @@
             else
               #need to display feedback.
               @peg_selected = false
-              @history.push << @peg_image.dup
-              print @history
+              @history << @peg_image.dup
               @peg_image.clear
             end
           end
@@ -122,18 +122,14 @@
         if mouse_x.to_i.between?(RED_X - DOT_WIDTH, RED_X + DOT_WIDTH) && mouse_y.to_i.between?(RED_Y - DOT_HEIGHT, RED_Y + DOT_HEIGHT)
           @peg_image << @red_peg
           @pegs << "Red"
-          puts "Red selected and clicked"
         elsif mouse_x.to_i.between?(BLUE_X - DOT_WIDTH, BLUE_X + DOT_WIDTH) && mouse_y.to_i.between?(BLUE_Y - DOT_HEIGHT, BLUE_Y + DOT_HEIGHT)
           @peg_image << @blue_peg
-          puts "Blue selcted and clicked"
           @pegs << "Blue"
         elsif mouse_x.to_i.between?(GREEN_X - DOT_WIDTH, GREEN_X + DOT_WIDTH) && mouse_y.to_i.between?(GREEN_Y - DOT_HEIGHT, GREEN_Y + DOT_HEIGHT)
           @peg_image << @green_peg
-          puts "Green selected and clicked"
           @pegs << "Green"
         elsif mouse_x.to_i.between?(YELLOW_X - DOT_WIDTH, YELLOW_X + DOT_WIDTH) && mouse_y.to_i.between?(YELLOW_Y - DOT_HEIGHT, YELLOW_Y + DOT_HEIGHT)
           @peg_image << @yellow_peg
-          puts "Yellow selected and clicked"
           @pegs << "Yellow"
         end
       end
