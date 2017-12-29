@@ -3,12 +3,14 @@ The Odin Project  - Ruby Programming Intermediate
 OOP Project 2 - Mastermind.
 
 V1 - Computer generates Rand() human player is code breaker.
-V1.5 - Used GOSU library to provide basic GUI (Requires GOSU GEM to execute)
 V2 - Human can choose to be code breaker or code creator.
 V3 - Increased Computer AI.
 V4 - Tested GOSU game library to make game look game like.
 
-In order to execute the gosu_mastermind.rb game (gosu powered simple GUI) you must ensure you have installed the gosu GEM $> gem install gosu
+TO DO:
 
-The gosu wiki at https://github.com/gosu/gosu/wiki and the gosu homepage https://www.libgosu.org provide a lot on information on using gosu.
+1.  Add line numbers to clearly show last guess.
+2. Change window or piece sizes to allow for 12 guesses.
+3. Put in checks to limit guesses to 12 turns.
 
+4. Enable AI to guess player created code.
