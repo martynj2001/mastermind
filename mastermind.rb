@@ -16,11 +16,8 @@ class Code
   end
 
   def compare (code)
-    #paramenter is a hash representing a row.
-    puts "Comparing Codes ......"
+    #paramenter is a hash representing a row
     @row.each do |pos, color|
-      puts "Master_Code position #{pos} is #{color}"
-      puts "Player_Code postition #{pos} is #{code.row[pos]}"
       if code.row.has_value?(color)
         if pos == code.row.key(color)
           code.black += 1
