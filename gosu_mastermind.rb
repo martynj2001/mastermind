@@ -5,10 +5,21 @@
     BACKGROUND, GRID, PEGS, UI = *0..3
   end
 
+  class Player_Code < Code
+
+    attr_accessor :peg_imgs
+
+    def initialize
+      super
+      @peg_imgs = Array.new
+    end
+  end
+
+
   class Mastermind < Gosu::Window
 
-    DOT_WIDTH = 60
-    DOT_HEIGHT = 60
+    DOT_WIDTH = 30
+    DOT_HEIGHT = 30
     RED_X, RED_Y = 100, 350
     BLUE_X, BLUE_Y = 150, 350
     GREEN_X, GREEN_Y = 470, 350
@@ -56,7 +67,6 @@
       self.draw_line(200, 0, Gosu::Color::BLACK, 200, 480, Gosu::Color::BLACK, ZOrder::UI)
       self.draw_line(450, 0, Gosu::Color::BLACK, 450, 480, Gosu::Color::BLACK, ZOrder::UI)
       @prompt.draw(@prompt_text, 10, 420, ZOrder::UI, 1.0, 1.0, Gosu::Color::GREEN)
-      #@button.draw(60, 345, ZOrder::UI)
       #Peg selction buttons
       @red_peg.draw(RED_X, RED_Y, ZOrder::PEGS)
       @blue_peg.draw(BLUE_X, BLUE_Y, ZOrder::PEGS)
@@ -64,13 +74,14 @@
       @yellow_peg.draw(YELLOW_X, YELLOW_Y, ZOrder::PEGS)
 
       # Draw any previous attempts with feedback on a new line.
-      # TO DO: Convert @history to hold Code objects, overide Code class to contain Array of images (@peg_image)
       if @history.length > 0
         line_y = 325
-        @history.each do |line|
-          line_x = 175
+        @history.each do |code|
+          line_x, b_x, w_x = 185, 185, 435
           line_y -= 45
-          line.each {|img| img.draw(line_x += 50, line_y, ZOrder::PEGS)}
+          code.peg_imgs.each{|img| img.draw(line_x += 50, line_y, ZOrder::PEGS)}
+          code.black.times {@black_sq.draw(b_x -= 40,line_y, ZOrder::PEGS)}
+          code.white.times {@white_sq.draw(w_x += 40,line_y, ZOrder::PEGS)}
         end
       end
 
@@ -93,10 +104,9 @@
         else
           @prompt_text = "You have had #{@guess} attempts"
           unless @peg_image.length < 4
-            player = Code.new
-            puts "Code Object Created"
+            puts "Im in for the #{@guess} time"
+            player = Player_Code.new
             player.create_code(@pegs)
-            print player.row
             @master_code.compare(player)
 
             if player.has_won?
@@ -104,14 +114,16 @@
             else
               #need to display feedback.
               @peg_selected = false
-              @history << @peg_image.dup
+              4.times { |i| player.peg_imgs[i] = @peg_image[i] }
+              @history << player
               @peg_image.clear
+              @pegs.clear
             end
           end
           @guess += 1
         end
       elsif id == Gosu::MS_LEFT
-        puts "Mouse clicked - MS_LEFT"
+        puts "mouse_x: #{mouse_x}, mouse_y:  #{mouse_y}"
         on_click
       end
     end
@@ -119,16 +131,17 @@
     # Hit-test for selecting a Peg with the mouse.
     def on_click
       if @peg_image.length < 4
-        if mouse_x.to_i.between?(RED_X - DOT_WIDTH, RED_X + DOT_WIDTH) && mouse_y.to_i.between?(RED_Y - DOT_HEIGHT, RED_Y + DOT_HEIGHT)
+        if mouse_x.to_i.between?(RED_X, RED_X + DOT_WIDTH) && mouse_y.to_i.between?(RED_Y, RED_Y + DOT_HEIGHT)
+          puts "Clicked RED"
           @peg_image << @red_peg
           @pegs << "Red"
-        elsif mouse_x.to_i.between?(BLUE_X - DOT_WIDTH, BLUE_X + DOT_WIDTH) && mouse_y.to_i.between?(BLUE_Y - DOT_HEIGHT, BLUE_Y + DOT_HEIGHT)
+        elsif mouse_x.to_i.between?(BLUE_X, BLUE_X + DOT_WIDTH) && mouse_y.to_i.between?(BLUE_Y , BLUE_Y + DOT_HEIGHT)
           @peg_image << @blue_peg
           @pegs << "Blue"
-        elsif mouse_x.to_i.between?(GREEN_X - DOT_WIDTH, GREEN_X + DOT_WIDTH) && mouse_y.to_i.between?(GREEN_Y - DOT_HEIGHT, GREEN_Y + DOT_HEIGHT)
+        elsif mouse_x.to_i.between?(GREEN_X, GREEN_X + DOT_WIDTH) && mouse_y.to_i.between?(GREEN_Y, GREEN_Y + DOT_HEIGHT)
           @peg_image << @green_peg
           @pegs << "Green"
-        elsif mouse_x.to_i.between?(YELLOW_X - DOT_WIDTH, YELLOW_X + DOT_WIDTH) && mouse_y.to_i.between?(YELLOW_Y - DOT_HEIGHT, YELLOW_Y + DOT_HEIGHT)
+        elsif mouse_x.to_i.between?(YELLOW_X, YELLOW_X + DOT_WIDTH) && mouse_y.to_i.between?(YELLOW_Y, YELLOW_Y + DOT_HEIGHT)
           @peg_image << @yellow_peg
           @pegs << "Yellow"
         end
