@@ -15,10 +15,7 @@ The gosu wiki at https://github.com/gosu/gosu/wiki and the gosu homepage https:/
 
 TO DO:
 
-1. Add line numbers to clearly show last guess.
-2. Change window or piece sizes  - 2 lots of six -  to allow for 12 guesses.
-3. Put in checks to limit guesses to 12 turns.
-
-4. Enable AI to guess player created code.
-5. Player can choice to be breaker or creator.
-6. Increase computer AI.
+1. Enable AI to guess player created code.
+2. Player can choice to be breaker or creator.
+3. Increase computer AI.
+4. Use bundle to auto install gosu gem for deployment.
