@@ -26,8 +26,7 @@
     GREEN_X, GREEN_Y = 470, 350
     YELLOW_X, YELLOW_Y = 520, 350
 
-
-    attr_accessor :prompt_text, :guess, :peg_selected, :pegs, :history, :master_code
+    attr_accessor :prompt_text, :guess, :peg_selected, :pegs, :history, :master_code, :flag
 
     def initialize
 
@@ -41,6 +40,8 @@
       @yellow_peg = Gosu::Image.new("media/yellow_dot.png", :tileable => true)
       @white_sq = Gosu::Image.new("media/white_sq.png", :tileable => true)
       @black_sq = Gosu::Image.new("media/black_sq.png", :tileable => true)
+      @btn_breaker = Gosu::Image.new("media/btn_breaker.png", :tileable => true)
+      @btn_master = Gosu::Image.new("media/btn_master.png", :tileable => true)
 
       @title_font = Gosu::Font.new(32, name: "Nimbus Mono L")
       @prompt = Gosu::Font.new(25, name: "Nimbus Mono L")
@@ -53,12 +54,14 @@
       @pegs = Array.new
       @history = Array.new
 
-      @prompt_text = "Welcome to Mastermind..... Press Enter to continue."
+      @prompt_text = "Welcome to Mastermind, Selected your role......."
       @guess = 0
       @peg_selected = false
       @won = false
       @lose = false
       @master_code = Code_Master.new
+      @breaker = false #True => Player chooses code, false => Player guesses code.
+      @start = false #True => player selected choice.
 
     end
 
@@ -83,6 +86,12 @@
       @green_peg.draw(GREEN_X, GREEN_Y, ZOrder::PEGS)
       @yellow_peg.draw(YELLOW_X, YELLOW_Y, ZOrder::PEGS)
 
+      #Draw choice Window
+      if @start == false
+        self.draw_quad(170, 150, Gosu::Color::BLACK, 475, 150, Gosu::Color::BLACK, 475, 250, Gosu::Color::BLACK, 170, 250, Gosu::Color::BLACK)
+        @btn_breaker.draw(180, 170, ZOrder::START)
+        @btn_master.draw(180, 205, ZOrder::START)
+      end
       # Draw any previous attempts with feedback on a new line.
       if @history.length > 0
         @fb_instr_b.draw("Black Pegs - Right Colour, right position", 10, 430, ZOrder::UI, 1.0, 1.0, Gosu::Color::GREEN)
@@ -116,38 +125,32 @@
 
     def button_down(id)
       if id == Gosu::KB_RETURN
-        if @guess < 1
-          @prompt_text = "Use the mouse to select your code and press Enter to confirm"
+        unless @peg_image.length < 4
           @guess += 1
-        else
-          unless @peg_image.length < 4
-            @guess += 1
-            player = Player_Code.new
-            player.guess = @guess - 1
-            player.create_code(@pegs)
-            @master_code.compare(player)
-            @prompt_text = "You have had #{player.guess} attempts"
-            if player.has_won?
-              @prompt_text = "Congratulations you have broken the code in #{player.guess} turns."
-              peg_selected = false
-              @history.clear
-              @won = true
-            elsif player.guess == 12
-              peg_selected = false
-              @history.clear
-              @prompt_text = "You have exceeded your available turns..... you lose!"
-              @lose = true
-            else
-              #need to display feedback.
-              @peg_selected = false
-              4.times { |i| player.peg_imgs[i] = @peg_image[i] }
-              @history.shift(5) if @history.length >= 6
-              @history << player
-              @peg_image.clear
-              @pegs.clear
-            end
+          player = Player_Code.new
+          player.guess = @guess
+          player.create_code(@pegs)
+          @master_code.compare(player)
+          @prompt_text = "You have had #{player.guess} attempts"
+          if player.has_won?
+            @prompt_text = "Congratulations you have broken the code in #{player.guess} turns."
+            peg_selected = false
+            @history.clear
+            @won = true
+          elsif player.guess == 12
+            peg_selected = false
+            @history.clear
+            @prompt_text = "You have exceeded your available turns..... you lose!"
+            @lose = true
+          else
+            #need to display feedback.
+            @peg_selected = false
+            4.times { |i| player.peg_imgs[i] = @peg_image[i] }
+            @history.shift(5) if @history.length >= 6
+            @history << player
+            @peg_image.clear
+            @pegs.clear
           end
-
         end
       elsif id == Gosu::MS_LEFT
         on_click
@@ -156,7 +159,15 @@
 
     # Hit-test for selecting a Peg with the mouse.
     def on_click
-      if @peg_image.length < 4
+      if @start == false
+        if mouse_x.to_i.between?(180,295) && mouse_y.to_i.between?(170, 200)
+          @start = true
+          @breaker = true
+        elsif mouse_x.to_i.between?(180,295) && mouse_y.to_i.between?(205, 235)
+          @start = true
+        end
+        @prompt_text = "Use the mouse to select your code and press Enter to confirm"
+      elsif @peg_image.length < 4
         if mouse_x.to_i.between?(RED_X, RED_X + DOT_WIDTH) && mouse_y.to_i.between?(RED_Y, RED_Y + DOT_HEIGHT)
           @peg_image << @red_peg
           @pegs << "Red"
