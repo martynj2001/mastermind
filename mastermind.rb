@@ -60,7 +60,7 @@ class Code_Master < Code
       already_used = true
     end
     @row = {one: pegs[0], two: pegs[1], three: pegs[2], four: pegs[3]}
-    print @row
+    #print @row
   end
 
   def get_color
@@ -79,3 +79,56 @@ class Code_Master < Code
 
     private :create_code, :get_color
 end # Code
+
+class AI_Code_Breaker < Code_Master
+
+	# Object that can create codes based on the results of the last guess.
+	attr_accessor :master_code, :history, :pegs
+	
+	def initialize master_code
+		super
+		@history = Array.new
+		@master_code = master_code
+		self.create_code #initial random guess
+	end
+	
+	def break_code
+	
+		#check how many turns have been taken
+		while @history.length < 12	
+			#compare current row
+			@master_code.compare(self)
+			if has_won?
+				return true
+			else
+				#create new row based on feedback
+				case @black
+				
+					when 0
+						#reorder the hash keys - then #rehash
+						
+				
+					when 1 
+					
+					when 2
+					
+					when 3
+					
+				end
+			
+			#has_won? If not then update history
+			update_history
+		end
+		return false
+	end
+	
+	def update_history
+		feedback = {black: @black, white: @white}
+		guess = [@row, ,feedback]
+		@history.push(guess)
+	end
+	
+	
+	private :master_code, :break_code
+
+end

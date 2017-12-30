@@ -2,7 +2,7 @@
   require './mastermind.rb'
 
   module ZOrder
-    BACKGROUND, GRID, PEGS, UI = *0..3
+    BACKGROUND, GRID, PEGS, UI, START = *0..4
   end
 
   class Player_Code < Code
