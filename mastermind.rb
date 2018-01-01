@@ -117,7 +117,7 @@ class AI_Code_Breaker < Code_Master
 				end
 
 			#has_won? If not then update history
-			   update_history
+			 update_history
       end
 	   end
 		 return false
